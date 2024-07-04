@@ -3,6 +3,7 @@ package com.hack_attack.sense.controller;
 import com.hack_attack.sense.dto.LevelDTO;
 import com.hack_attack.sense.entity.Bay;
 import com.hack_attack.sense.entity.Level;
+import com.hack_attack.sense.repository.BayRepository;
 import com.hack_attack.sense.service.LevelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,12 @@ public class LevelController {
 
     private final LevelService levelService;
 
+    private final BayRepository bayRepository;
+
     @Autowired
-    public LevelController(LevelService levelService) {
+    public LevelController(LevelService levelService, BayRepository bayRepository) {
         this.levelService = levelService;
+        this.bayRepository = bayRepository;
     }
 
     @GetMapping
@@ -85,17 +89,26 @@ public class LevelController {
         if (level.getBay() != null) {
             dto.setBayId(level.getBay().getId());
         }
-        dto.setItem(level.getItem());
         dto.setImage(level.getImage());
+        dto.setRipenessValue(level.getRipenessValue());
+        dto.setColor(level.getColor());
+        dto.setFnvType(level.getFnvType());
         return dto;
     }
 
     private Level toEntity(LevelDTO dto) {
         Level level = new Level();
+        if(dto.getBayId() != null) {
+            Bay bay = bayRepository.findById(dto.getBayId()).orElseThrow(()-> new RuntimeException("The BayId entered as input is invalid"));
+            level.setBay(bay);
+        }
         level.setName(dto.getName());
         // You can optionally set Bay using its ID here if needed
-        level.setItem(dto.getItem());
         level.setImage(dto.getImage());
+        level.setRipenessValue(dto.getRipenessValue());
+        level.setColor(dto.getColor());
+        level.setFnvType(dto.getFnvType());
         return level;
     }
+
 }

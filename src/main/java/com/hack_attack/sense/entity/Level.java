@@ -1,6 +1,6 @@
 package com.hack_attack.sense.entity;
 
-import com.hack_attack.sense.enums.Item;
+import com.hack_attack.sense.enums.RipenessColor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -21,8 +21,11 @@ public class Level {
     @DBRef
     private Bay bay;
 
-    private Item item;
+    private String fnvType;
 
     private byte[] image;
 
+    private Double ripenessValue;
+
+    private RipenessColor color;
 }

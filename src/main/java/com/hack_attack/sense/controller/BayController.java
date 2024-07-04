@@ -1,26 +1,34 @@
 package com.hack_attack.sense.controller;
 
 import com.hack_attack.sense.dto.BayDTO;
+import com.hack_attack.sense.entity.Aisle;
 import com.hack_attack.sense.entity.Bay;
+import com.hack_attack.sense.entity.Vendor;
+import com.hack_attack.sense.repository.AisleRepository;
+import com.hack_attack.sense.repository.VendorRepository;
 import com.hack_attack.sense.service.BayService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bays")
 public class BayController {
 
-    private final BayService bayService;
+    @Autowired
+    private  BayService bayService;
 
     @Autowired
-    public BayController(BayService bayService) {
-        this.bayService = bayService;
-    }
+    private  VendorRepository vendorRepository;
+
+    @Autowired
+    private AisleRepository aisleRepository;
 
     @GetMapping
     public ResponseEntity<List<BayDTO>> getAllBays() {
@@ -93,6 +101,14 @@ public class BayController {
     private Bay toEntity(BayDTO dto) {
         Bay bay = new Bay();
         bay.setName(dto.getName());
+        if (dto.getVendorId() != null) {
+            Vendor vendor = vendorRepository.findById(dto.getVendorId()).orElseThrow(()-> new RuntimeException("The VendorId used as input is not valid"));
+            bay.setVendor(vendor);
+        }
+        if(dto.getAisleId()!= null) {
+            Aisle aisle = aisleRepository.findById(dto.getAisleId()).orElseThrow(()-> new RuntimeException("The AisleId used as input is not valid"));
+            bay.setAisle(aisle);
+        }
         // You can optionally set Vendor and Aisle using their IDs here if needed
         return bay;
     }

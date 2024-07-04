@@ -1,7 +1,10 @@
 package com.hack_attack.sense.controller;
 
 import com.hack_attack.sense.dto.LpnDTO;
+import com.hack_attack.sense.entity.Level;
 import com.hack_attack.sense.entity.Lpn;
+import com.hack_attack.sense.repository.LevelRepository;
+import com.hack_attack.sense.repository.LpnRepository;
 import com.hack_attack.sense.service.LpnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +20,13 @@ public class LpnController {
 
     private final LpnService lpnService;
 
+    private final LevelRepository levelRepository;
+
     @Autowired
-    public LpnController(LpnService lpnService) {
+    public LpnController(LpnService lpnService, LevelRepository levelRepository)
+    {
         this.lpnService = lpnService;
+        this.levelRepository = levelRepository;
     }
 
     @GetMapping
@@ -91,6 +98,11 @@ public class LpnController {
     private Lpn toEntity(LpnDTO dto) {
         Lpn lpn = new Lpn();
         lpn.setName(dto.getName());
+        if (dto.getLevelId() != null) {
+            Level level = levelRepository.findById(dto.getLevelId())
+                    .orElseThrow(() -> new RuntimeException("The level id inserted as input is not valid"));
+            lpn.setLevel(level);
+        }
         // You can optionally set Level using its ID here if needed
         lpn.setWeightKg(dto.getWeightKg());
         return lpn;

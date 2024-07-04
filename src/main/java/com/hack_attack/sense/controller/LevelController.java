@@ -1,6 +1,8 @@
 package com.hack_attack.sense.controller;
 
+import com.hack_attack.model.LevelDetailsResponse;
 import com.hack_attack.sense.dto.LevelDTO;
+import com.hack_attack.sense.dto.ResponseDTO;
 import com.hack_attack.sense.entity.Bay;
 import com.hack_attack.sense.entity.Level;
 import com.hack_attack.sense.repository.BayRepository;
@@ -79,6 +81,13 @@ public class LevelController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/getLevel/{id}")
+    public ResponseEntity<ResponseDTO<LevelDetailsResponse>> getLevelDetailsById(@PathVariable String id) {
+        LevelDetailsResponse levelResponse = levelService.getLevelDetailsById(id);
+        ResponseDTO<LevelDetailsResponse> response = new ResponseDTO<>("Level details is fetched successfully", levelResponse);
+        return ResponseEntity.ok(response);
     }
 
     // Helper methods

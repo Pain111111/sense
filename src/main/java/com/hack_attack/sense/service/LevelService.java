@@ -1,5 +1,6 @@
 package com.hack_attack.sense.service;
 
+import com.hack_attack.model.LevelDetailsResponse;
 import com.hack_attack.sense.entity.Level;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface LevelService {
     Level updateLevel(String id, Level level);
 
     boolean deleteLevel(String id);
+
+    LevelDetailsResponse getLevelDetailsById(String id);
 }

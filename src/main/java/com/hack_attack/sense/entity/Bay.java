@@ -23,6 +23,4 @@ public class Bay {
     @DBRef
     private Aisle aisle;
 
-    private List<Level> levels;
-
 }

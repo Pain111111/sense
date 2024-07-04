@@ -11,12 +11,11 @@ import java.util.List;
 @Document(collection = "aisles")
 @Data
 public class Aisle {
+
     @Id
     private String id;
 
     @Indexed(unique = true)
     private String name;
-
-    private List<Bay> bays;
 
 }

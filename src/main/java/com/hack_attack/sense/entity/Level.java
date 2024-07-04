@@ -21,8 +21,6 @@ public class Level {
     @DBRef
     private Bay bay;
 
-    private List<Lpn> lpns;
-
     private Item item;
 
     private byte[] image;
